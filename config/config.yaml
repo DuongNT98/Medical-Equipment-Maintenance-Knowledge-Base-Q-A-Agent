@@ -1,0 +1,20 @@
+# Runtime parameters — loaded by AgentRegistry, passed as Graph(config=...).
+# This is a SEPARATE file from config/agent.yaml (the static manifest): agent.yaml
+# is AgentRegistry's discovery entry point, this file is the agent's own runtime
+# config, keyed by whatever your Graph/node code reads via self.config.get(...).
+# See the framework documentation for the agent.yaml / config.yaml split of responsibility.
+
+max_retry: 3
+timeout_s: 30
+
+# No HITL — this template's main-slot GraphNode sets propagate_hitl = False
+# (src/graph/graph.py) and no node calls interrupt(). hitl.enabled intentionally
+# omitted rather than set to false: PB-7 (tests/proof_of_boundary/
+# test_pb7_hitl_interrupt_propagation.py) treats an absent/non-mapping hitl key
+# as "not enabled" and auto-skips.
+
+equipment_kb_namespace: "medical_equipment_manuals"
+supported_manufacturers: ["philips", "ge_healthcare", "mindray", "nihon_kohden"]
+safety_warning_mode: "verbatim"   # MUST be "verbatim" — never "summarize" for medical equipment
+language: "ja"                    # ja | en
+regulatory_standard: "mhlw_pmd_act"   # 医療機器法 (Pharmaceutical and Medical Device Act)
